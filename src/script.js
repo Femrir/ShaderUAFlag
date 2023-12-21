@@ -9,7 +9,7 @@ import testFragmentShader from './shaders/test/fragment.glsl'
  */
 // Debug
 const gui = new GUI()
-gui.hide()
+gui.close()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -27,8 +27,8 @@ const material = new THREE.RawShaderMaterial({
     fragmentShader: testFragmentShader,
     uniforms:
     {
-        uFriquency: { value: new THREE.Vector2(10, 0.1) },
-        uAmplitude: { value: new THREE.Vector2(0.05, 0.01) },
+        uFriquency: { value: new THREE.Vector2(10, 7) },
+        uAmplitude: { value: new THREE.Vector2(0.17, 0.1) },
         uSpeed: { value: new THREE.Vector2(3, 2) },
         uTime: { value: 0 },
 
@@ -43,6 +43,7 @@ const material = new THREE.RawShaderMaterial({
 
 
 const speedGui = gui.addFolder("Speed")
+speedGui.close()
 speedGui
     .add(material.uniforms.uSpeed.value, 'x')
     .min(-5)
@@ -55,6 +56,7 @@ speedGui
     .step(0.1)
 
 const friquencyGui = gui.addFolder("Friquency")
+friquencyGui.close()
 friquencyGui
     .add(material.uniforms.uFriquency.value, 'x')
     .min(0)
@@ -83,6 +85,16 @@ const mesh = new THREE.Mesh(geometry, material)
 mesh.scale.y = 0.5
 scene.add(mesh)
 
+const radius = 0.01;
+const height = 3;
+
+const geometryCylinder = new THREE.CylinderGeometry( radius, radius, height, 32 ); 
+const materialCylinder = new THREE.MeshBasicMaterial( {color: '#8A9393'} ); 
+const cylinder = new THREE.Mesh( geometryCylinder, materialCylinder ); 
+cylinder.position.set(mesh.scale.x/2 + radius, - height/2 + mesh.scale.y/2,0)
+
+scene.add(cylinder)
+
 /**
  * Sizes
  */
@@ -110,14 +122,14 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(1, - 0.5, 1.5)
-camera.lookAt(mesh)
+camera.position.set(2 * mesh.scale.x, - 0.5, 2 * mesh.scale.x)
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-
+controls.target.set(mesh.scale.x/4 + radius,  - height/4 + mesh.scale.y/2,0)
+console.log(controls)
 /**
  * Renderer
  */

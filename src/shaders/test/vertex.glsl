@@ -11,9 +11,12 @@ void main()
 {
     v_pos = position;
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    modelPosition.z += sin(modelPosition.x * uFriquency.x + uTime*uSpeed.x) * uAmplitude.x;
-    modelPosition.x += sin(modelPosition.y * uFriquency.y + uTime*uSpeed.y) * uAmplitude.y;
+    float a_x = (position.x - 0.5) * uAmplitude.x;
+    float a_y = (position.x - 0.5) * uAmplitude.y;
     
+    modelPosition.z += sin(position.x * uFriquency.x + uTime*uSpeed.x) * a_x ;
+    modelPosition.x += sin(modelPosition.y * uFriquency.y + uTime*uSpeed.y) * a_y;
+
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectionposition = projectionMatrix * viewPosition;
 
