@@ -16,15 +16,8 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+scene.background = new THREE.Color( "#1C1C1C" );
 
-/**
- * Textures
- */
-const textureLoader = new THREE.TextureLoader()
-
-/**
- * Test mesh
- */
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
@@ -39,8 +32,11 @@ const material = new THREE.RawShaderMaterial({
         uSpeed: { value: new THREE.Vector2(3, 2) },
         uTime: { value: 0 },
 
-        uColor1: { value: new THREE.Color('#0057b8') },
-        uColor2: { value: new THREE.Color('#ffd700') },
+        uColorF_1: { value: new THREE.Color('#0057b8') },
+        uColorF_2: { value: new THREE.Color('#ffd700') },
+
+        uColorB_1: { value: new THREE.Color('#ff0000') },
+        uColorB_2: { value: new THREE.Color('#191919') },
     },
     side: 2,
 })
@@ -76,7 +72,7 @@ amplitudeGui
     .min(0)
     .max(1)
     .step(0.01)
-    amplitudeGui
+amplitudeGui
     .add(material.uniforms.uAmplitude.value, 'y')
     .min(0)
     .max(1)
@@ -114,7 +110,8 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0.25, - 0.25, 1)
+camera.position.set(1, - 0.5, 1.5)
+camera.lookAt(mesh)
 scene.add(camera)
 
 // Controls
